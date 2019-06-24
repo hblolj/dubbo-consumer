@@ -17,7 +17,7 @@ public class App {
     public static void main(String[] args) throws IOException {
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("order-consumer.xml");
-        IOrderService service = (IOrderService) context.getBean("orderService");;
+        IOrderService service = (IOrderService) context.getBean("orderService");
 
         OrderDTO dto = new OrderDTO();
         dto.setName("Zard");

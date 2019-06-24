@@ -9,11 +9,14 @@
 
     <dubbo:application name="order-consumer"/>
 
-    <dubbo:registry address="N/A"/>
+    <!--<dubbo:registry address="N/A"/>-->
+    <dubbo:registry address="zookeeper://0.0.0.0:2181"/>
 
-    <dubbo:protocol name="dubbo" port="20880"/>
+    <!--<dubbo:protocol name="dubbo" port="20880"/>-->
 
-    <dubbo:reference id="orderService" interface="com.hblolj.dubbo.order.IOrderService"
-    url="dubbo://192.168.1.222:20880/com.hblolj.dubbo.order.IOrderService"/>
+    <!--<dubbo:reference id="orderService" interface="com.hblolj.dubbo.order.IOrderService"-->
+    <!--url="dubbo://192.168.1.222:20880/com.hblolj.dubbo.order.IOrderService"/>-->
+
+    <dubbo:reference id="orderService" interface="com.hblolj.dubbo.order.IOrderService"/>
 
 </beans>
