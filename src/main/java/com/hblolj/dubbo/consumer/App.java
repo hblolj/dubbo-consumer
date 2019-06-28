@@ -18,7 +18,7 @@ public class App {
         context.start();
 
         AnnotationAction action = (AnnotationAction) context.getBean("annotationAction");
-        String result = action.doSayHello("Dubbo Annotation Service Exclude Xml Config");
+        String result = action.doSayHello("Dubbo Registry In Zookeeper");
         System.out.println(result);
     }
 }
