@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://code.alibabatech.com/schema/dubbo
-       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.hblolj.dubbo.consumer"/>
 
     <dubbo:application name="order-consumer"/>
 
@@ -13,4 +16,7 @@
 
     <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService"/>
 
+    <dubbo:annotation package="com.hblolj.dubbo.consumer.action"/>
+
+    <bean id="annotationAction" class="com.hblolj.dubbo.consumer.action.AnnotationAction"/>
 </beans>

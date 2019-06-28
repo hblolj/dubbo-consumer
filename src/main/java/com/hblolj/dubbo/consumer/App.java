@@ -1,6 +1,6 @@
 package com.hblolj.dubbo.consumer;
 
-import com.hblolj.dubbo.provider.DemoService;
+import com.hblolj.dubbo.consumer.action.AnnotationAction;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class App {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("consumer.xml");
         context.start();
 
-        DemoService service = (DemoService) context.getBean("demoService");
-        String result = service.sayHello("Dubbo");
+        AnnotationAction action = (AnnotationAction) context.getBean("annotationAction");
+        String result = action.doSayHello("Dubbo Annotation Service");
         System.out.println(result);
     }
 }
