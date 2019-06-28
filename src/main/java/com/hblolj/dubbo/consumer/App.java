@@ -2,6 +2,7 @@ package com.hblolj.dubbo.consumer;
 
 import com.hblolj.dubbo.consumer.action.AnnotationAction;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 

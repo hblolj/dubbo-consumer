@@ -12,7 +12,7 @@
 
     <dubbo:application name="consumer"/>
 
-    <dubbo:registry protocol="multicast" address="225.1.2.3:7777"/>
+    <dubbo:registry protocol="zookeeper" address="0.0.0.0:2181"/>
 
     <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService"/>
 
