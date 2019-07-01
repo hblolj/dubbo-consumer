@@ -13,11 +13,16 @@ import org.springframework.stereotype.Component;
 @Component("annotationAction")
 public class AnnotationAction {
 
-    @Reference
+    // 设置 check 有效
+//    @Reference(check = false)
+    @Reference(version = "1.0.1", protocol = "dubbo", check = false)
     private DemoService demoService;
 
     public String doSayHello(String name){
-        return demoService.sayHello(name);
-//        return "default values";
+
+        System.out.println(null == demoService);
+
+//        return demoService.sayHello(name);
+        return "default values";
     }
 }

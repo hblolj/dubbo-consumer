@@ -8,13 +8,15 @@
        http://code.alibabatech.com/schema/dubbo
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.hblolj.dubbo.consumer"/>
+    <!--<context:component-scan base-package="com.hblolj.dubbo.consumer"/>-->
 
     <dubbo:application name="consumer"/>
 
-    <dubbo:registry protocol="zookeeper" address="0.0.0.0:2181"/>
+    <dubbo:registry protocol="zookeeper" address="0.0.0.0:2181" check="true"/>
 
-    <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService"/>
+    <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService" version="1.0.1" protocol="dubbo" check="false"/>
+
+    <dubbo:reference id="protocolService" interface="com.hblolj.dubbo.provider.ProtocolService" version="1.0.0" protocol="rmi" check="false"/>
 
     <dubbo:annotation package="com.hblolj.dubbo.consumer.action"/>
 

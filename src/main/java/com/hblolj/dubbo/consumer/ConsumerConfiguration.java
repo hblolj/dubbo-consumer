@@ -1,5 +1,6 @@
 package com.hblolj.dubbo.consumer;
 
+
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
