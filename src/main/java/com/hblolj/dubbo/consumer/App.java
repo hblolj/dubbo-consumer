@@ -35,6 +35,12 @@ public class App {
 
         // 同步调用异步
 
+        // 负载均衡 Provider 与 Custom 都可以配置，粒度可以配置到方法级别，建议配置到 Provider 端，方便控制
+        DemoService demoService = (DemoService) context.getBean("demoService");
+        for (int i = 0; i < 10; i++) {
+            System.out.println(demoService.sayBye(i + ""));
+        }
+
         // 同步调用同步
         ProtocolService protocolService = (ProtocolService) context.getBean("protocolService");
         System.out.println(protocolService.testMultiProcotol());
