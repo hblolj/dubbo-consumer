@@ -1,5 +1,6 @@
 package com.hblolj.dubbo.consumer;
 
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.hblolj.dubbo.consumer.action.AnnotationAction;
 import com.hblolj.dubbo.provider.DemoService;
 import com.hblolj.dubbo.provider.ProtocolService;
@@ -7,6 +8,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @auther Ori
@@ -15,22 +21,75 @@ import java.io.IOException;
  */
 public class App {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("consumer.xml");
 //        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConsumerConfiguration.class);
-        context.start();
+//        context.start();
+//        testAnnotation(context);
 
-        // 这里使用 Zookeeper 主要作为订阅使用，所以 Zookeeper 没有启动的话，也不会报错
-//        AnnotationAction action = (AnnotationAction) context.getBean("annotationAction");
-//        String result = action.doSayHello("Dubbo Registry In Zookeeper");
-//        System.out.println(result);
+        // 异步调用同步
+//        testAsyncInvokeProviderSynchronizationMethod(context);
 
-        DemoService demoService = (DemoService) context.getBean("demoService");
+        // 异步调用异步
+//        testAsyncInvokeProviderAsyncMethod(context);
+
+        // 同步调用异步
+
+        // 同步调用同步
         ProtocolService protocolService = (ProtocolService) context.getBean("protocolService");
-
-        System.out.println(demoService.sayBye("Zard"));
         System.out.println(protocolService.testMultiProcotol());
+
+//        System.out.println(demoService.sayBye("Zard"));
         System.out.println("Set Reference Check is false");
         System.in.read();
+    }
+
+    // dubbo 2.7 之后才支持 provider 异步执行
+    private static void testAsyncInvokeProviderAsyncMethod(ClassPathXmlApplicationContext context) {
+        System.out.println(Instant.now());
+        DemoService demoService = (DemoService) context.getBean("demoService");
+        CompletableFuture<String> future = demoService.anyncSayHello("辛吉德");
+        new Thread(() -> {
+            try {
+                while (future == null || future.get() == null){
+                    TimeUnit.MILLISECONDS.sleep(10);
+                }
+                System.out.println(future.get());
+                System.out.println(Instant.now());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    // 异步调用 Provider 同步方法
+    private static void testAsyncInvokeProviderSynchronizationMethod(ClassPathXmlApplicationContext context) {
+        System.out.println(Instant.now());
+        DemoService demoService = (DemoService) context.getBean("demoService");
+        String result = demoService.sayHello("沃里克");
+        Future<String> future = RpcContext.getContext().getFuture();
+        new Thread(() -> {
+            try {
+                while (future.get() == null){
+                    TimeUnit.MILLISECONDS.sleep(10);
+                }
+                System.out.println(future.get());
+                System.out.println(Instant.now());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        System.out.println(result);
+    }
+
+    // 测试注解方式引用服务
+    private static void testAnnotation(AnnotationConfigApplicationContext context) {
+        AnnotationAction action = (AnnotationAction) context.getBean("annotationAction");
+        String result = action.doSayHello("Dubbo Registry In Zookeeper");
+        System.out.println(result);
     }
 }

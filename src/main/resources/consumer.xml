@@ -12,11 +12,19 @@
 
     <dubbo:application name="consumer"/>
 
-    <dubbo:registry protocol="zookeeper" address="0.0.0.0:2181" check="true"/>
+    <dubbo:registry id="colony" protocol="zookeeper" address="0.0.0.0:2181, 0.0.0.0:2182, 0.0.0.0:2183" check="true"/>
 
-    <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService" version="1.0.1" protocol="dubbo" check="false"/>
+    <!-- 额外配置一个注册中心，不同服务注册到不同注册中心，不使用集群中的节点，因为集群节点会共享信息，不方便测试结果查看 -->
+    <dubbo:registry id="standalone" protocol="zookeeper" address="0.0.0.0:2184"/>
 
-    <dubbo:reference id="protocolService" interface="com.hblolj.dubbo.provider.ProtocolService" version="1.0.0" protocol="rmi" check="false"/>
+    <dubbo:reference id="demoService" interface="com.hblolj.dubbo.provider.DemoService" version="1.0.1"
+                     protocol="dubbo" check="false" registry="colony" timeout="2000">
+        <dubbo:method name="sayHello" async="true"/>
+        <dubbo:method name="sayBye" async="true"/>
+        <dubbo:method name="anyncSayHello" async="true"/>
+    </dubbo:reference>
+
+    <dubbo:reference id="protocolService" interface="com.hblolj.dubbo.provider.ProtocolService" version="1.0.0" protocol="rmi" check="false" registry="standalone"/>
 
     <dubbo:annotation package="com.hblolj.dubbo.consumer.action"/>
 
